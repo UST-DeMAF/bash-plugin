@@ -7,6 +7,8 @@ import java.util.UUID;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.amqp.core.Message;
 import org.springframework.amqp.core.MessageBuilder;
 import org.springframework.amqp.core.MessageProperties;
@@ -21,6 +23,9 @@ import ust.tad.shellplugin.models.tsdm.TechnologySpecificDeploymentModel;
 
 @Service
 public class AnalysisTaskResponseSender {
+    
+    private static final Logger LOG =
+      LoggerFactory.getLogger(AnalysisTaskResponseSender.class);
 
     @Autowired
     private RabbitTemplate template;
@@ -76,6 +81,7 @@ public class AnalysisTaskResponseSender {
 
     public void sendEmbeddedDeploymentModelAnalysisRequest(EmbeddedDeploymentModelAnalysisRequest request)  {
         ObjectMapper objectMapper = new ObjectMapper();
+        LOG.info("Sending EmbeddedDeploymentModelAnalysisRequest: "+request.toString());
 
         Message message;
         try {

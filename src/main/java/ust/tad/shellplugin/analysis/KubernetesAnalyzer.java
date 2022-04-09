@@ -2,6 +2,7 @@ package ust.tad.shellplugin.analysis;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
@@ -16,7 +17,7 @@ import ust.tad.shellplugin.models.tsdm.TechnologySpecificDeploymentModel;
 public class KubernetesAnalyzer {
 
     public TechnologySpecificDeploymentModel analyzeKubernetesCommand(String technology, String lineContent, TechnologySpecificDeploymentModel parentDeploymentModel, URL currentDirectory) throws MalformedURLException, InvalidAnnotationException, InvalidNumberOfLinesException {
-        URL location = new URL("");
+        URL location = currentDirectory;
 
         String[] tokens = lineContent.split(" ");
         for(String token : tokens) {
@@ -30,16 +31,20 @@ public class KubernetesAnalyzer {
             DeploymentModelContent deploymentModelContent = new DeploymentModelContent();
             deploymentModelContent.setLocation(location);
     
+            List<Line> lines = new ArrayList<>();
             Line line = new Line();
             line.setNumber(0);
-            line.setComprehensibility(1D);
             line.setAnalyzed(true);
-            deploymentModelContent.setLines(List.of(line));
+            line.setComprehensibility(1D);
+            lines.add(line);
+            deploymentModelContent.setLines(lines);
     
             TechnologySpecificDeploymentModel embeddedDeploymentModel = new TechnologySpecificDeploymentModel();
             embeddedDeploymentModel.setTransformationProcessId(parentDeploymentModel.getTransformationProcessId());
             embeddedDeploymentModel.setTechnology(technology);
-            embeddedDeploymentModel.setCommands(List.of(lineContent));
+            List<String> commands = new ArrayList<>();
+            commands.add(lineContent);
+            embeddedDeploymentModel.setCommands(commands);
             embeddedDeploymentModel.addDeploymentModelContent(deploymentModelContent);
     
             return embeddedDeploymentModel;

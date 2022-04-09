@@ -13,6 +13,8 @@ import ust.tad.shellplugin.models.tadm.entities.RelationType;
 
 public class AnnotatedDeploymentModel extends DeploymentModel{
 
+    private UUID id = UUID.randomUUID();
+    
     private UUID transformationProcessId;
     
 
@@ -24,6 +26,14 @@ public class AnnotatedDeploymentModel extends DeploymentModel{
         super(properties, components, relations, componentTypes, relationTypes);
         this.transformationProcessId = transformationProcessId;
     }
+    
+    public UUID getId() {
+        return this.id;
+    }
+
+    public void setId(UUID id) {
+        this.id = id;
+    }
 
     public UUID getTransformationProcessId() {
         return this.transformationProcessId;
@@ -31,6 +41,11 @@ public class AnnotatedDeploymentModel extends DeploymentModel{
 
     public void setTransformationProcessId(UUID transformationProcessId) {
         this.transformationProcessId = transformationProcessId;
+    }
+    
+    public AnnotatedDeploymentModel id(UUID id) {
+        setId(id);
+        return this;
     }
 
     public AnnotatedDeploymentModel transformationProcessId(UUID transformationProcessId) {
@@ -51,12 +66,13 @@ public class AnnotatedDeploymentModel extends DeploymentModel{
             && Objects.equals(getRelations(), annotatedDeploymentModel.getRelations()) 
             && Objects.equals(getComponentTypes(), annotatedDeploymentModel.getComponentTypes()) 
             && Objects.equals(getRelationTypes(), annotatedDeploymentModel.getRelationTypes())
+            && Objects.equals(id, annotatedDeploymentModel.id)
             && Objects.equals(transformationProcessId, annotatedDeploymentModel.transformationProcessId);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getProperties(), getComponents(), getRelations(), getComponentTypes(), getRelationTypes(), transformationProcessId);
+        return Objects.hash(getProperties(), getComponents(), getRelations(), getComponentTypes(), getRelationTypes(), id, transformationProcessId);
     }
 
     @Override
@@ -67,8 +83,10 @@ public class AnnotatedDeploymentModel extends DeploymentModel{
             ", relations='" + getRelations() + "'" +
             ", componentTypes='" + getComponentTypes() + "'" +
             ", relationTypes='" + getRelationTypes() + "'" +
+            ", id='" + getId() + "'" +
             ", transformationProcessId='" + getTransformationProcessId() + "'" +
             "}";
     }
+    
 
 }

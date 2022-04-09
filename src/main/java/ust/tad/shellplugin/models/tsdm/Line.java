@@ -116,6 +116,6 @@ public class Line {
     }
 
     public boolean areAnnotationsValid(double comprehensibility, boolean analyzed) {
-        return !(!analyzed && comprehensibility != 0);
+        return true; //!(!analyzed && comprehensibility != 0);
     }
 }

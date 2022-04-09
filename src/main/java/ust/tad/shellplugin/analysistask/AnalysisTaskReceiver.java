@@ -1,8 +1,5 @@
 package ust.tad.shellplugin.analysistask;
 
-import java.io.IOException;
-import java.net.URISyntaxException;
-
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -14,8 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import ust.tad.shellplugin.analysis.AnalysisService;
-import ust.tad.shellplugin.models.tsdm.InvalidAnnotationException;
-import ust.tad.shellplugin.models.tsdm.InvalidNumberOfLinesException;
 
 @Service
 public class AnalysisTaskReceiver {
@@ -39,8 +34,8 @@ public class AnalysisTaskReceiver {
      * @param message
      * @throws JsonProcessingException
      */
-    public void receive(Message message) {     
-        try {
+    public void receive(Message message) {  
+        if(message.getMessageProperties().getHeader("formatIndicator") != null) {
             switch (message.getMessageProperties().getHeader("formatIndicator").toString()) {
                 case "AnalysisTaskStartRequest":
                     receiveAnalysisTaskStartRequest(message);
@@ -52,7 +47,7 @@ public class AnalysisTaskReceiver {
                     respondWithErrorMessage("Could not process message: Unknown format of request message.");
                     break;
             }   
-        } catch (NullPointerException e) {
+        } else {
             respondWithErrorMessage("Could not process message: Header with formatIndicator missing.");
         }                   
     }
@@ -72,25 +67,11 @@ public class AnalysisTaskReceiver {
             AnalysisTaskStartRequest.class);
 
         LOG.info(String.format("received AnalysisTaskStartRequest: %s", analysisTaskStartRequest.toString()));
-        try {
-            analysisService.startAnalysis(
-                analysisTaskStartRequest.getTaskId(), 
-                analysisTaskStartRequest.getTransformationProcessId(), 
-                analysisTaskStartRequest.getCommands(), 
-                analysisTaskStartRequest.getLocations());
-        } catch (URISyntaxException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (InvalidNumberOfLinesException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (InvalidAnnotationException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
+        analysisService.startAnalysis(
+            analysisTaskStartRequest.getTaskId(), 
+            analysisTaskStartRequest.getTransformationProcessId(), 
+            analysisTaskStartRequest.getCommands(), 
+            analysisTaskStartRequest.getLocations());
     }
 
     /**

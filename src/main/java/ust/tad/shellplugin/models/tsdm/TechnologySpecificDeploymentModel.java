@@ -16,9 +16,9 @@ public class TechnologySpecificDeploymentModel {
 
     private String technology;
 
-    private List<String> commands;
+    private List<String> commands = new ArrayList<>();
 
-    private List<DeploymentModelContent> content;
+    private List<DeploymentModelContent> content = new ArrayList<>();
 
     private List<TechnologySpecificDeploymentModel> embeddedDeploymentModels = new ArrayList<>();
     

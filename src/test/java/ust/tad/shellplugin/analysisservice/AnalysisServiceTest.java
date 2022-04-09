@@ -23,17 +23,12 @@ public class AnalysisServiceTest {
     public void testetes() throws IOException, URISyntaxException {
         URL webResource = new URL("https://stackoverflow.com/questions/3571223/how-do-i-get-the-file-extension-of-a-file-in-java");
         URL file = new URL("file://Ubuntu/home/ubuntu/fork/kube/azure-start.sh");
+        URL fileAlt = new URL("file:/home/ubuntu/fork/kube/azure-start.sh");
         URL directory = new URL("file://folder/stions/3571223");
 
         String command = "kubectl create -f k8/";
 
-        LOG.info(file.toURI().toString());
-
-        BufferedReader reader = new BufferedReader(new InputStreamReader(file.openStream()));
-        while(reader.ready()) {
-            LOG.info(reader.readLine());
-        }
-        reader.close();
+        LOG.info(StringUtils.getFilenameExtension(fileAlt.toString()));
     }
     
 }

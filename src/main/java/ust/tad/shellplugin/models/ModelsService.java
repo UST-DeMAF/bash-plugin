@@ -49,7 +49,9 @@ public class ModelsService {
             .contentType(MediaType.APPLICATION_JSON)
             .accept(MediaType.APPLICATION_JSON)
             .body(BodyInserters.fromValue(technologySpecificDeploymentModel))
-            .retrieve();
+            .retrieve()
+            .bodyToMono(TechnologySpecificDeploymentModel.class)
+            .block();
     }
 
     /**
@@ -80,6 +82,8 @@ public class ModelsService {
             .contentType(MediaType.APPLICATION_JSON)
             .accept(MediaType.APPLICATION_JSON)
             .body(BodyInserters.fromValue(annotatedDeploymentModel))
-            .retrieve();
+            .retrieve()
+            .bodyToMono(AnnotatedDeploymentModel.class)
+            .block();
     }
 }
