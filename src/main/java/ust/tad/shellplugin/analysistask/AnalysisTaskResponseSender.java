@@ -100,6 +100,7 @@ public class AnalysisTaskResponseSender {
     public void sendEmbeddedDeploymentModelAnalysisRequestFromModel(TechnologySpecificDeploymentModel embeddedDeploymentModel, UUID parentTaskId)  {
         EmbeddedDeploymentModelAnalysisRequest request = new EmbeddedDeploymentModelAnalysisRequest();
         request.setParentTaskId(parentTaskId);
+        request.setTransformationProcessId(embeddedDeploymentModel.getTransformationProcessId());
         request.setTechnology(embeddedDeploymentModel.getTechnology());
         request.setCommands(embeddedDeploymentModel.getCommands());
         List<Location> locations = new ArrayList<>();
