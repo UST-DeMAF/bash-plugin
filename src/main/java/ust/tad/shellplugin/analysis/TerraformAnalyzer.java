@@ -35,8 +35,8 @@ public class TerraformAnalyzer {
             List<Line> lines = new ArrayList<>();
             Line line = new Line();
             line.setNumber(0);
-            line.setAnalyzed(true);
-            line.setComprehensibility(1D);
+            line.setAnalyzed(false);
+            line.setComprehensibility(0D);
             lines.add(line);
             deploymentModelContent.setLines(lines);
     

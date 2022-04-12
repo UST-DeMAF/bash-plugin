@@ -7,7 +7,6 @@ import java.util.Objects;
 import java.util.UUID;
 
 
-
 public class TechnologySpecificDeploymentModel { 
 
     private UUID id = UUID.randomUUID();
@@ -212,7 +211,7 @@ public class TechnologySpecificDeploymentModel {
      */
     public int addOrUpdateEmbeddedDeploymentModel(TechnologySpecificDeploymentModel newEmbeddedDeploymentModel) {
         for (TechnologySpecificDeploymentModel embeddedDeploymentModel : this.embeddedDeploymentModels) {
-            if (newEmbeddedDeploymentModel.getId() == embeddedDeploymentModel.getId()) {
+            if (newEmbeddedDeploymentModel.getId().equals(embeddedDeploymentModel.getId())) {
                 int index = this.embeddedDeploymentModels.indexOf(embeddedDeploymentModel);
                 this.embeddedDeploymentModels.set(index, newEmbeddedDeploymentModel);
                 return index;
