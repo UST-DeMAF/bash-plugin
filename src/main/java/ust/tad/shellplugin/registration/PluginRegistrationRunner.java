@@ -6,7 +6,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.amqp.core.DirectExchange;
+import org.springframework.amqp.core.FanoutExchange;
 import org.springframework.amqp.core.MessageListener;
 import org.springframework.amqp.rabbit.core.RabbitAdmin;
 import org.springframework.amqp.rabbit.listener.AbstractMessageListenerContainer;
@@ -77,8 +77,8 @@ public class PluginRegistrationRunner implements ApplicationRunner{
 
         context.registerBean("requestQueueListener", requestQueueListener.getClass(), requestQueueListener);
 
-        context.registerBean(responseExchangeName, DirectExchange.class, 
-            () -> new DirectExchange(response.getResponseExchangeName(), true, false));
+        context.registerBean(responseExchangeName, FanoutExchange.class, 
+            () -> new FanoutExchange(response.getResponseExchangeName(), true, false));
     }
 
     private String createPluginRegistrationBody() throws JsonProcessingException {
