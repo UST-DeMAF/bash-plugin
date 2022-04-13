@@ -1,4 +1,4 @@
-# shell-plugin
+# bash-plugin
 
 ## Build
 ```shell

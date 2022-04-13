@@ -9,10 +9,10 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>ust.tad</groupId>
-	<artifactId>shell-plugin</artifactId>
+	<artifactId>bash-plugin</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>shell-plugin</name>
-	<description>shell-plugin for technology-agnostic deployments</description>
+	<name>bash-plugin</name>
+	<description>bash-plugin for technology-agnostic deployments</description>
 	<properties>
 		<java.version>11</java.version>
 	</properties>
