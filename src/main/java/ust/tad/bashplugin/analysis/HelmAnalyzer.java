@@ -15,6 +15,8 @@ import ust.tad.bashplugin.models.tsdm.TechnologySpecificDeploymentModel;
 @Service
 public class HelmAnalyzer {
 
+    private static List<String> repoCommands = new ArrayList<>();
+
     public TechnologySpecificDeploymentModel analyzeHelmCommand(String technology, String lineContent, TechnologySpecificDeploymentModel parentDeploymentModel, URL currentDirectory) throws InvalidAnnotationException, InvalidNumberOfLinesException {
 
         String[] tokens = lineContent.split(" ");
@@ -35,10 +37,13 @@ public class HelmAnalyzer {
                 embeddedDeploymentModel.setTransformationProcessId(parentDeploymentModel.getTransformationProcessId());
                 embeddedDeploymentModel.setTechnology(technology);
                 List<String> commands = new ArrayList<>();
+                commands.addAll(HelmAnalyzer.repoCommands);
                 commands.add(lineContent);
                 embeddedDeploymentModel.setCommands(commands);
                 embeddedDeploymentModel.addDeploymentModelContent(deploymentModelContent);
                 return embeddedDeploymentModel;
+            } else if(token.equals("repo")) {
+                HelmAnalyzer.repoCommands.add(lineContent);
             }
         }
         return null;              

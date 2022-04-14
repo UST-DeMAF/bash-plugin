@@ -21,7 +21,7 @@ public class KubernetesAnalyzer {
 
         String[] tokens = lineContent.split(" ");
         for(String token : tokens) {
-            if(token.equals("create")) {
+            if(token.equals("create") || token.equals("apply")) {
                 location = new URL(currentDirectory.toString()+getLocationFromCommand(lineContent));
             }
         }
@@ -54,6 +54,14 @@ public class KubernetesAnalyzer {
         }        
     }
 
+    /**
+     * Get the location specified in a command.
+     * Searches the command for "-f" and returns the location specified afterwards.
+     * If the command does not specify a location, returns an empty String. 
+     *
+     * @param command
+     * @return
+     */
     private String getLocationFromCommand(String command) {
         String[] tokens = command.split(" "); 
         for (int index = 1; index <= tokens.length; index++) {
@@ -61,7 +69,7 @@ public class KubernetesAnalyzer {
                  return tokens[index+1];
             }
         }
-        return null;
+        return "";
     }
     
 }

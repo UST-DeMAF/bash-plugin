@@ -21,8 +21,8 @@ public class TerraformAnalyzer {
 
         String[] tokens = lineContent.split(" ");
         for(String token : tokens) {
-            if(token.startsWith("-chdir")) {
-                String chdir = token.split("=")[1];
+            if(token.equals("init") || token.equals("apply")) {
+                String chdir = getLocationFromCommand(lineContent);
                 location = new URL(currentDirectory.toString()+chdir);
             }
         }
@@ -54,5 +54,24 @@ public class TerraformAnalyzer {
             return existingEmbeddedModel;
         }        
     }
+
+    /**
+     * Get the location specified in a command.
+     * Searches the command for "-chdir" and returns the location specified afterwards.
+     * If the command does not specify a location, returns an empty String. 
+     * 
+     * @param command
+     * @return
+     */
+    private String getLocationFromCommand(String command) {
+        String[] tokens = command.split(" "); 
+        for(String token : tokens) {
+            if(token.startsWith("-chdir")) {
+                return token.split("=")[1];
+            }
+        }
+        return "";
+    }
+    
     
 }
