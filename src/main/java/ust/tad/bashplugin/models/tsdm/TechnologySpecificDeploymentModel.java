@@ -184,6 +184,14 @@ public class TechnologySpecificDeploymentModel {
         this.content.add(deploymentModelContent);
     }
 
+    public void removeDeploymentModelContent(DeploymentModelContent deploymentModelContent) throws InvalidNumberOfContentException {
+        if(content.size() == 1){
+            throw new InvalidNumberOfContentException(INVALIDNUMBEROFCONTENTEXCEPTIONMESSAGE);
+        } else {
+            this.content.remove(deploymentModelContent);
+        }
+    }
+    
     public void addEmbeddedDeploymentModel(TechnologySpecificDeploymentModel embeddedDeploymentModel) {
         this.embeddedDeploymentModels.add(embeddedDeploymentModel);
     }

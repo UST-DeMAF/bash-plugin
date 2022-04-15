@@ -1,4 +1,4 @@
-package ust.tad.bashplugin.models.tadm.entities;
+package ust.tad.bashplugin.models.tadm;
 
 import java.net.URI;
 import java.util.Objects;
@@ -11,14 +11,17 @@ public class Artifact {
 
     private URI fileUri;
     
+    private Confidence confidence;
+
 
     public Artifact() {
     }
 
-    public Artifact(String name, String type, URI fileUri) {
+    public Artifact(String name, String type, URI fileUri, Confidence confidence) {
         this.name = name;
         this.type = type;
         this.fileUri = fileUri;
+        this.confidence = confidence;
     }
 
     public String getName() {
@@ -45,6 +48,14 @@ public class Artifact {
         this.fileUri = fileUri;
     }
 
+    public Confidence getConfidence() {
+        return this.confidence;
+    }
+
+    public void setConfidence(Confidence confidence) {
+        this.confidence = confidence;
+    }
+
     public Artifact name(String name) {
         setName(name);
         return this;
@@ -60,6 +71,11 @@ public class Artifact {
         return this;
     }
 
+    public Artifact confidence(Confidence confidence) {
+        setConfidence(confidence);
+        return this;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (o == this)
@@ -68,12 +84,12 @@ public class Artifact {
             return false;
         }
         Artifact artifact = (Artifact) o;
-        return Objects.equals(name, artifact.name) && Objects.equals(type, artifact.type) && Objects.equals(fileUri, artifact.fileUri);
+        return Objects.equals(name, artifact.name) && Objects.equals(type, artifact.type) && Objects.equals(fileUri, artifact.fileUri) && Objects.equals(confidence, artifact.confidence);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, type, fileUri);
+        return Objects.hash(name, type, fileUri, confidence);
     }
 
     @Override
@@ -82,7 +98,12 @@ public class Artifact {
             " name='" + getName() + "'" +
             ", type='" + getType() + "'" +
             ", fileUri='" + getFileUri() + "'" +
+            ", confidence='" + getConfidence() + "'" +
             "}";
+    }
+        
+    public Boolean isConfirmed() {
+        return this.getConfidence().equals(Confidence.CONFIRMED);
     }
 
 }

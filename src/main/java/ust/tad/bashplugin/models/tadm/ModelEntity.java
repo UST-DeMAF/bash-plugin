@@ -1,12 +1,13 @@
-package ust.tad.bashplugin.models.tadm.entities;
+package ust.tad.bashplugin.models.tadm;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.UUID;
 
 public abstract class ModelEntity {
     
-    private String id;
+    private String id = UUID.randomUUID().toString();
 
     private String name;
 

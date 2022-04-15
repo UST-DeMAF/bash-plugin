@@ -1,4 +1,4 @@
-package ust.tad.bashplugin.models.tadm.entities;
+package ust.tad.bashplugin.models.tadm;
 
 public class InvalidRelationException extends Exception{
     public InvalidRelationException(String errorMessage) {

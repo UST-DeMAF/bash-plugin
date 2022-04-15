@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
 
-import ust.tad.bashplugin.models.tadm.annotatedentities.AnnotatedDeploymentModel;
+import ust.tad.bashplugin.models.tadm.TechnologyAgnosticDeploymentModel;
 import ust.tad.bashplugin.models.tsdm.TechnologySpecificDeploymentModel;
 
 @Service
@@ -60,30 +60,30 @@ public class ModelsService {
      * @param transformationProcessId
      * @return
      */
-    public AnnotatedDeploymentModel getTechnologyAgnosticDeploymentModel(UUID transformationProcessId) {
+    public TechnologyAgnosticDeploymentModel getTechnologyAgnosticDeploymentModel(UUID transformationProcessId) {
          return modelsServiceApiClient.get()
             .uri(uriBuilder -> uriBuilder
                 .path("/technology-agnostic/"+transformationProcessId)
                 .build())
             .accept(MediaType.APPLICATION_JSON)
             .retrieve()
-            .bodyToMono(AnnotatedDeploymentModel.class)
+            .bodyToMono(TechnologyAgnosticDeploymentModel.class)
             .block();
     }
 
     /**
      * Update a technology-agnostic deployment model by sending it to the update endpoint of the models service.
      * 
-     * @param annotatedDeploymentModel
+     * @param technologyAgnosticDeploymentModel
      */
-    public void updateTechnologyAgnosticDeploymentModel(AnnotatedDeploymentModel annotatedDeploymentModel) {
+    public void updateTechnologyAgnosticDeploymentModel(TechnologyAgnosticDeploymentModel technologyAgnosticDeploymentModel) {
         modelsServiceApiClient.post()
             .uri("/technology-agnostic")
             .contentType(MediaType.APPLICATION_JSON)
             .accept(MediaType.APPLICATION_JSON)
-            .body(BodyInserters.fromValue(annotatedDeploymentModel))
+            .body(BodyInserters.fromValue(technologyAgnosticDeploymentModel))
             .retrieve()
-            .bodyToMono(AnnotatedDeploymentModel.class)
+            .bodyToMono(TechnologyAgnosticDeploymentModel.class)
             .block();
     }
 }

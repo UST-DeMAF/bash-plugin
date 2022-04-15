@@ -79,5 +79,10 @@ public class DeploymentModelContent {
 
     public void addLine(Line line) {
         this.lines.add(line);
+        for(Line lineElement : this.lines) {
+            if(lineElement.getNumber() == 0) {
+                lines.remove(lineElement);
+            }
+        }
     }
 }

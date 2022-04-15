@@ -1,4 +1,4 @@
-package ust.tad.bashplugin.models.tadm.entities;
+package ust.tad.bashplugin.models.tadm;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,13 +10,16 @@ public class Operation {
 
     private List<Artifact> artifacts = new ArrayList<>();
 
+    private Confidence confidence;
+
 
     public Operation() {
     }
 
-    public Operation(String name, List<Artifact> artifacts) {
+    public Operation(String name, List<Artifact> artifacts, Confidence confidence) {
         this.name = name;
         this.artifacts = artifacts;
+        this.confidence = confidence;
     }
 
     public String getName() {
@@ -35,6 +38,14 @@ public class Operation {
         this.artifacts = artifacts;
     }
 
+    public Confidence getConfidence() {
+        return this.confidence;
+    }
+
+    public void setConfidence(Confidence confidence) {
+        this.confidence = confidence;
+    }
+
     public Operation name(String name) {
         setName(name);
         return this;
@@ -42,6 +53,11 @@ public class Operation {
 
     public Operation artifacts(List<Artifact> artifacts) {
         setArtifacts(artifacts);
+        return this;
+    }
+
+    public Operation confidence(Confidence confidence) {
+        setConfidence(confidence);
         return this;
     }
 
@@ -53,12 +69,12 @@ public class Operation {
             return false;
         }
         Operation operation = (Operation) o;
-        return Objects.equals(name, operation.name) && Objects.equals(artifacts, operation.artifacts);
+        return Objects.equals(name, operation.name) && Objects.equals(artifacts, operation.artifacts) && Objects.equals(confidence, operation.confidence);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, artifacts);
+        return Objects.hash(name, artifacts, confidence);
     }
 
     @Override
@@ -66,7 +82,12 @@ public class Operation {
         return "{" +
             " name='" + getName() + "'" +
             ", artifacts='" + getArtifacts() + "'" +
+            ", confidence='" + getConfidence() + "'" +
             "}";
+    }   
+
+    public Boolean isConfirmed() {
+        return this.getConfidence().equals(Confidence.CONFIRMED);
     }
 
     

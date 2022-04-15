@@ -1,4 +1,4 @@
-package ust.tad.bashplugin.models.tadm.annotatedentities;
+package ust.tad.bashplugin.models.tadm;
 
 public enum Confidence {
     CONFIRMED,

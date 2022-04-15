@@ -1,30 +1,31 @@
-package ust.tad.bashplugin.models.tadm.entities;
+package ust.tad.bashplugin.models.tadm;
 
 import java.util.List;
 import java.util.Objects;
 
-public class ComponentType extends ModelElementType{
+public class RelationType extends ModelElementType{
 
-    private ComponentType parentType;
-
-    public ComponentType() {
+    private RelationType parentType;
+    
+    
+    public RelationType() {
         super();
     }
 
-    public ComponentType(String name, String description, List<Property> properties, List<Operation> operations, ComponentType parentType) {
+    public RelationType(String name, String description, List<Property> properties, List<Operation> operations, RelationType parentType) {
         super(name, description, properties, operations);
         this.parentType = parentType;
     }
 
-    public ComponentType getParentType() {
+    public RelationType getParentType() {
         return this.parentType;
     }
 
-    public void setParentType(ComponentType parentType) {
+    public void setParentType(RelationType parentType) {
         this.parentType = parentType;
     }
 
-    public ComponentType parentType(ComponentType parentType) {
+    public RelationType parentType(RelationType parentType) {
         setParentType(parentType);
         return this;
     }
@@ -33,16 +34,16 @@ public class ComponentType extends ModelElementType{
     public boolean equals(Object o) {
         if (o == this)
             return true;
-        if (!(o instanceof ComponentType)) {
+        if (!(o instanceof RelationType)) {
             return false;
         }
-        ComponentType componentType = (ComponentType) o;
-        return Objects.equals(getId(), componentType.getId())
-            && Objects.equals(getName(), componentType.getName()) 
-            && Objects.equals(getDescription(), componentType.getDescription()) 
-            && Objects.equals(getProperties(), componentType.getProperties()) 
-            && Objects.equals(getOperations(), componentType.getOperations()) 
-            && Objects.equals(parentType, componentType.parentType);
+        RelationType relationType = (RelationType) o;
+        return Objects.equals(getId(), relationType.getId()) 
+            && Objects.equals(getName(), relationType.getName()) 
+            && Objects.equals(getDescription(), relationType.getDescription()) 
+            && Objects.equals(getProperties(), relationType.getProperties()) 
+            && Objects.equals(getOperations(), relationType.getOperations()) 
+            && Objects.equals(parentType, relationType.parentType);
     }
 
     @Override
@@ -61,6 +62,5 @@ public class ComponentType extends ModelElementType{
             ", operations='" + getOperations() + "'" +
             "}";
     }
-
 
 }

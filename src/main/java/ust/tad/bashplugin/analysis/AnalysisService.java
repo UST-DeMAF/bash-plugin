@@ -23,9 +23,10 @@ import org.springframework.util.StringUtils;
 import ust.tad.bashplugin.analysistask.AnalysisTaskResponseSender;
 import ust.tad.bashplugin.analysistask.Location;
 import ust.tad.bashplugin.models.ModelsService;
-import ust.tad.bashplugin.models.tadm.annotatedentities.AnnotatedDeploymentModel;
+import ust.tad.bashplugin.models.tadm.TechnologyAgnosticDeploymentModel;
 import ust.tad.bashplugin.models.tsdm.DeploymentModelContent;
 import ust.tad.bashplugin.models.tsdm.InvalidAnnotationException;
+import ust.tad.bashplugin.models.tsdm.InvalidNumberOfContentException;
 import ust.tad.bashplugin.models.tsdm.InvalidNumberOfLinesException;
 import ust.tad.bashplugin.models.tsdm.Line;
 import ust.tad.bashplugin.models.tsdm.TechnologySpecificDeploymentModel;
@@ -65,7 +66,7 @@ public class AnalysisService {
 
     private TechnologySpecificDeploymentModel tsdm;
 
-    private AnnotatedDeploymentModel tadm;
+    private TechnologyAgnosticDeploymentModel tadm;
 
     private Set<Integer> newEmbeddedDeploymentModelIndexes = new HashSet<>();
 
@@ -100,7 +101,7 @@ public class AnalysisService {
             LOG.info("run analysis!");
             String result = runAnalysis(commands, locations);
             LOG.info("Analysis completed!" + result);
-        } catch (NullPointerException | URISyntaxException | IOException | InvalidNumberOfLinesException | InvalidAnnotationException e) {
+        } catch (NullPointerException | URISyntaxException | IOException | InvalidNumberOfLinesException | InvalidAnnotationException | InvalidNumberOfContentException e) {
             e.printStackTrace();
             analysisTaskResponseSender.sendFailureResponse(taskId, e.getClass()+e.getMessage());
             return;
@@ -123,7 +124,7 @@ public class AnalysisService {
         }
     }
 
-    private void updateDeploymentModels(TechnologySpecificDeploymentModel tsdm, AnnotatedDeploymentModel tadm) {
+    private void updateDeploymentModels(TechnologySpecificDeploymentModel tsdm, TechnologyAgnosticDeploymentModel tadm) {
         LOG.info("Updating tsdm: "+tsdm.toString());
         modelsService.updateTechnologySpecificDeploymentModel(tsdm);
         LOG.info("Updating tadm: "+tadm.toString());
@@ -134,6 +135,8 @@ public class AnalysisService {
      * Iterate of the locations and parse in all files that can be found.
      * The file has to have the fileextension ".sh", otherwise it will be ignored.
      * If the given location is a directory, iterate over all contained files.
+     * Removes the deployment model content associated with the old directory locations
+     * because it has been resolved to the contained files.
      * 
      * @param commands
      * @param locations
@@ -141,8 +144,9 @@ public class AnalysisService {
      * @throws IOException
      * @throws InvalidNumberOfLinesException
      * @throws InvalidAnnotationException
+     * @throws InvalidNumberOfContentException
      */
-    private String runAnalysis(List<String> commands, List<Location> locations) throws URISyntaxException, IOException, InvalidNumberOfLinesException, InvalidAnnotationException {
+    private String runAnalysis(List<String> commands, List<Location> locations) throws URISyntaxException, IOException, InvalidNumberOfLinesException, InvalidAnnotationException, InvalidNumberOfContentException {
         LOG.info("run analysis for real!");
         for(Location location : locations) {
             LOG.info("Analyzing location: "+location.toString());
@@ -150,10 +154,17 @@ public class AnalysisService {
                 LOG.info("location is a directory!");
                 File directory = new File(location.getUrl().toURI());
                 for (File file : directory.listFiles()) {
-                    if(".sh".equals(StringUtils.getFilenameExtension(file.toURI().toURL().toString()))) {                        
+                    if("sh".equals(StringUtils.getFilenameExtension(file.toURI().toURL().toString()))) {                        
                         analyzeFile(file.toURI().toURL());
                     }
                 }
+                DeploymentModelContent contentToRemove = new DeploymentModelContent();
+                for (DeploymentModelContent content : this.tsdm.getContent()) {
+                    if (content.getLocation().equals(location.getUrl())) {
+                        contentToRemove = content;
+                    }
+                }
+                this.tsdm.removeDeploymentModelContent(contentToRemove);
             } else {
                 LOG.info("location is a file!");
                 if("sh".equals(StringUtils.getFilenameExtension(location.getUrl().toString()))) {  

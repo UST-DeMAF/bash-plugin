@@ -1,4 +1,4 @@
-package ust.tad.bashplugin.models.tadm.entities;
+package ust.tad.bashplugin.models.tadm;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,15 +10,17 @@ public class Component extends ModelElement{
 
     private List<Artifact> artifacts = new ArrayList<>();
 
+    private Confidence confidence;
 
     public Component() {
         super();
     }
 
-    public Component(String name, String description, List<Property> properties, List<Operation> operations, ComponentType type, List<Artifact> artifacts) {
+    public Component(String name, String description, List<Property> properties, List<Operation> operations, ComponentType type, List<Artifact> artifacts, Confidence confidence) {
         super(name, description, properties, operations);
         this.type = type;
         this.artifacts = artifacts;
+        this.confidence = confidence;
     }
     
     public ComponentType getType() {
@@ -37,6 +39,14 @@ public class Component extends ModelElement{
         this.artifacts = artifacts;
     }
     
+    public Confidence getConfidence() {
+        return this.confidence;
+    }
+
+    public void setConfidence(Confidence confidence) {
+        this.confidence = confidence;
+    }
+    
     public Component type(ComponentType type) {
         setType(type);
         return this;
@@ -44,6 +54,11 @@ public class Component extends ModelElement{
 
     public Component artifacts(List<Artifact> artifacts) {
         setArtifacts(artifacts);
+        return this;
+    }
+    
+    public Component confidence(Confidence confidence) {
+        setConfidence(confidence);
         return this;
     }
 
@@ -61,12 +76,13 @@ public class Component extends ModelElement{
             && Objects.equals(getProperties(), component.getProperties()) 
             && Objects.equals(getOperations(), component.getOperations())
             && Objects.equals(type, component.type)
-            && Objects.equals(artifacts, component.artifacts);
+            && Objects.equals(artifacts, component.artifacts)
+            && Objects.equals(confidence, component.confidence);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getId(), getName(), getDescription(), getProperties(), getOperations(), type, artifacts);
+        return Objects.hash(getId(), getName(), getDescription(), getProperties(), getOperations(), type, artifacts, confidence);
     }
 
     @Override
@@ -79,7 +95,12 @@ public class Component extends ModelElement{
             ", properties='" + getProperties() + "'" +
             ", operations='" + getOperations() + "'" +
             ", artifacts='" + getArtifacts() + "'" +
+            ", confidence='" + getConfidence() + "'" +
             "}";
+    }
+
+    public Boolean isConfirmed() {
+        return this.getConfidence().equals(Confidence.CONFIRMED);
     }
 
     
