@@ -35,8 +35,8 @@ public class AnalysisTaskResponseSender {
 
     
     public void sendSuccessResponse(UUID taskId)  {
+        LOG.info("Transformation completed successfully, sending success response");
         ObjectMapper objectMapper = new ObjectMapper();
-
         AnalysisTaskResponse analysisTaskResponse = new AnalysisTaskResponse();
         analysisTaskResponse.setTaskId(taskId);
         analysisTaskResponse.setSuccess(true);        
@@ -56,8 +56,8 @@ public class AnalysisTaskResponseSender {
     }
 
     public void sendFailureResponse(UUID taskId, String errorMessage)  {
+        LOG.info("Sending failure response: "+errorMessage);
         ObjectMapper objectMapper = new ObjectMapper();
-
         AnalysisTaskResponse analysisTaskResponse = new AnalysisTaskResponse();
         if(taskId != null) {
             analysisTaskResponse.setTaskId(taskId);
@@ -80,9 +80,8 @@ public class AnalysisTaskResponseSender {
     }
 
     public void sendEmbeddedDeploymentModelAnalysisRequest(EmbeddedDeploymentModelAnalysisRequest request)  {
-        ObjectMapper objectMapper = new ObjectMapper();
         LOG.info("Sending EmbeddedDeploymentModelAnalysisRequest: "+request.toString());
-
+        ObjectMapper objectMapper = new ObjectMapper();
         Message message;
         try {
             message = MessageBuilder

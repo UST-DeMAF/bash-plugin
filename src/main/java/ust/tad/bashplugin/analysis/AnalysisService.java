@@ -14,8 +14,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -33,9 +31,6 @@ import ust.tad.bashplugin.models.tsdm.TechnologySpecificDeploymentModel;
 
 @Service
 public class AnalysisService {
-    
-    private static final Logger LOG =
-      LoggerFactory.getLogger(AnalysisService.class);
 
     /**
      * These are the detectable technologies of the plugin.
@@ -89,18 +84,11 @@ public class AnalysisService {
      * @throws URISyntaxException
      */
     public void startAnalysis(UUID taskId, UUID transformationProcessId, List<String> commands, List<Location> locations) {
-
-        LOG.info("started analysis");
-
         this.tsdm = modelsService.getTechnologySpecificDeploymentModel(transformationProcessId);
-        LOG.info("Retrieved tsdm: "+tsdm.toString());
         this.tadm = modelsService.getTechnologyAgnosticDeploymentModel(transformationProcessId);
-        LOG.info("Retrieved tadm: "+tadm.toString());
 
         try {
-            LOG.info("run analysis!");
-            String result = runAnalysis(commands, locations);
-            LOG.info("Analysis completed!" + result);
+            runAnalysis(commands, locations);
         } catch (NullPointerException | URISyntaxException | IOException | InvalidNumberOfLinesException | InvalidAnnotationException | InvalidNumberOfContentException e) {
             e.printStackTrace();
             analysisTaskResponseSender.sendFailureResponse(taskId, e.getClass()+e.getMessage());
@@ -108,26 +96,20 @@ public class AnalysisService {
         }
 
         updateDeploymentModels(this.tsdm, this.tadm);
-        LOG.info("Updated Deployment Models");
 
         if(newEmbeddedDeploymentModelIndexes.isEmpty()) {
-            LOG.info("No embedded deployment models discovered, sending success repsonse");
             analysisTaskResponseSender.sendSuccessResponse(taskId);
         } else {
-            LOG.info("Discovered "+newEmbeddedDeploymentModelIndexes.size()+" new embedded deployment models!");
             for (int index : newEmbeddedDeploymentModelIndexes) {
                 analysisTaskResponseSender.sendEmbeddedDeploymentModelAnalysisRequestFromModel(
                     this.tsdm.getEmbeddedDeploymentModels().get(index), taskId); 
             }
-            LOG.info("Sending success response");
             analysisTaskResponseSender.sendSuccessResponse(taskId);
         }
     }
 
     private void updateDeploymentModels(TechnologySpecificDeploymentModel tsdm, TechnologyAgnosticDeploymentModel tadm) {
-        LOG.info("Updating tsdm: "+tsdm.toString());
         modelsService.updateTechnologySpecificDeploymentModel(tsdm);
-        LOG.info("Updating tadm: "+tadm.toString());
         modelsService.updateTechnologyAgnosticDeploymentModel(tadm);
     }
 
@@ -146,12 +128,9 @@ public class AnalysisService {
      * @throws InvalidAnnotationException
      * @throws InvalidNumberOfContentException
      */
-    private String runAnalysis(List<String> commands, List<Location> locations) throws URISyntaxException, IOException, InvalidNumberOfLinesException, InvalidAnnotationException, InvalidNumberOfContentException {
-        LOG.info("run analysis for real!");
+    private void runAnalysis(List<String> commands, List<Location> locations) throws URISyntaxException, IOException, InvalidNumberOfLinesException, InvalidAnnotationException, InvalidNumberOfContentException {
         for(Location location : locations) {
-            LOG.info("Analyzing location: "+location.toString());
             if ("file".equals(location.getUrl().getProtocol()) && new File(location.getUrl().toURI()).isDirectory()) {
-                LOG.info("location is a directory!");
                 File directory = new File(location.getUrl().toURI());
                 for (File file : directory.listFiles()) {
                     if("sh".equals(StringUtils.getFilenameExtension(file.toURI().toURL().toString()))) {                        
@@ -166,16 +145,12 @@ public class AnalysisService {
                 }
                 this.tsdm.removeDeploymentModelContent(contentToRemove);
             } else {
-                LOG.info("location is a file!");
                 if("sh".equals(StringUtils.getFilenameExtension(location.getUrl().toString()))) {  
-                    LOG.info("location is a shell file!");      
                     analyzeFile(location.getUrl());
                 } else {
-                    LOG.info("location is not a shell file! Skipping...");
                 }
             }
         }
-        return "ran analysis";
     }
 
     /**
