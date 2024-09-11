@@ -83,7 +83,8 @@ public class AnalysisService {
      * @throws IOException
      * @throws URISyntaxException
      */
-    public void startAnalysis(UUID taskId, UUID transformationProcessId, List<String> commands, List<Location> locations) {
+    public void startAnalysis(UUID taskId, UUID transformationProcessId, List<String> commands,
+                              List<String> options, List<Location> locations) {
         this.tsdm = modelsService.getTechnologySpecificDeploymentModel(transformationProcessId);
         this.tadm = modelsService.getTechnologyAgnosticDeploymentModel(transformationProcessId);
 
@@ -258,6 +259,4 @@ public class AnalysisService {
             this.newEmbeddedDeploymentModelIndexes.add(index);
         } 
     }
-
-    
 }
