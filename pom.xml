@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>ust.tad</groupId>
 	<artifactId>bash-plugin</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.2.0-SNAPSHOT</version>
 	<name>bash-plugin</name>
 	<description>bash-plugin for technology-agnostic deployments</description>
 	<properties>
