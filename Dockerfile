@@ -20,5 +20,8 @@ WORKDIR /app
 # Copy all built files from the build stage to the runtime stage
 COPY --from=build /app /app
 
+# Install curl for health checks
+RUN apt update && apt install --no-install-recommends -y curl
+
 # Set the command to run the application
 CMD ["java", "-jar", "/app/target/bash-plugin-0.2.0-SNAPSHOT.jar"]
