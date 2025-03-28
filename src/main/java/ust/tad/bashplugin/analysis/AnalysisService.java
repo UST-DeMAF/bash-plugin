@@ -79,6 +79,7 @@ public class AnalysisService {
       List<String> commands,
       List<String> options,
       List<Location> locations) {
+    clearVariables();
     this.tsdm = modelsService.getTechnologySpecificDeploymentModel(transformationProcessId);
     this.tadm = modelsService.getTechnologyAgnosticDeploymentModel(transformationProcessId);
 
@@ -269,5 +270,13 @@ public class AnalysisService {
       int index = this.tsdm.addOrUpdateEmbeddedDeploymentModel(embeddedDeploymentModel);
       this.newEmbeddedDeploymentModelIndexes.add(index);
     }
+  }
+
+  /**
+   * Clears the variables and resources set to avoid side effects between different transformation
+   * processes.
+   */
+  private void clearVariables() {
+    newEmbeddedDeploymentModelIndexes.clear();
   }
 }
