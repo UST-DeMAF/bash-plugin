@@ -11,8 +11,9 @@ COPY src ./src
 # Build the project, using multiple threads and skipping tests
 RUN mvn -T 2C -q clean package -DskipTests
 
-# Stage 2: Create a minimal runtime image using OpenJDK 11 JRE
-FROM openjdk:11-jre-slim
+# Stage 2: Create a minimal runtime image using the Eclipse Temurin 11 JRE
+# The image already contains curl
+FROM eclipse-temurin:11-jre
 
 # Set the working directory for the runtime stage
 WORKDIR /app
@@ -21,7 +22,6 @@ WORKDIR /app
 COPY --from=build /app /app
 
 # Install curl for health checks
-RUN apt update && apt install --no-install-recommends -y curl
 
 # Set the command to run the application
 CMD ["java", "-jar", "/app/target/bash-plugin-0.2.0-SNAPSHOT.jar"]
